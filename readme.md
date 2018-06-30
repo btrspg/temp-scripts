@@ -6,3 +6,5 @@
 
 - bed_merge.pl:	将bed中重叠的区域整合起来
 
+- from_refFlat_to_bed.pl:	从注释文件中提取bed
+
