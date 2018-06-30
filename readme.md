@@ -10,3 +10,4 @@
 
 - create_list.pl:	这个就没什么太大用，生成一个list
 
+- bed_size.pl:	计算bed大小
