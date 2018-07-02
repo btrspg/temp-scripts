@@ -30,7 +30,7 @@ foreach my $key(keys %hash){
 	foreach my $v(keys %{$locs{$key}}){
 		my $last=0;
 		my $start=0;
-		foreach my $loca(sort {$a<=>$b} keys %{$loc{$key}{$v}}){
+		foreach my $loca(sort {$a<=>$b} keys %{$locs{$key}{$v}}){
 			if ($loca == $last+1){
 				$last = $loca;
 			}
@@ -39,9 +39,9 @@ foreach my $key(keys %hash){
 				$last = $loca;
 			}
 			else{
-				print OUT "$V\t$start\t$last\n";
+				print OUT "$v\t$start\t$last\n";
 				$start = $loca;
-				$end = $loca;
+				$last = $loca;
 			}
 		}
 #		print OUT "$tmps[0]\t$tmps[1]\t".($tmps[1]+1)."\n";
