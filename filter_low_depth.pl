@@ -24,10 +24,10 @@ while(<IN>){
 }
 close IN;
 
-foreach my $key(keys %hash){
+foreach my $key(sort {$a<=>$b} keys %hash){
 	open OUT,">$outdir\_$key.stats" || die $!;
 	print "total: $hash{$key} site below $key\n";
-	foreach my $v(keys %{$locs{$key}}){
+	foreach my $v(sort {$a<=>$b} keys %{$locs{$key}}){
 		my $last=0;
 		my $start=0;
 		foreach my $loca(sort {$a<=>$b} keys %{$locs{$key}{$v}}){

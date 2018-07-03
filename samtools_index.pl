@@ -9,4 +9,5 @@ my $samtools = shift;
 my @files = glob("$pattern");
 foreach my $file(@files){
 	print "$samtools index $file\n";
+	system("$samtools index $file");
 }
