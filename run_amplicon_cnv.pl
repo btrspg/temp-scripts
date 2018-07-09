@@ -1,13 +1,14 @@
 use strict;
 use File::Basename;
 
-die "perl $0 <pattern> <outdir> <python> <bed-gc> <controls>" unless @ARGV==5;
+die "perl $0 <pattern> <outdir> <python> <bed-gc> <controls> <bin>" unless @ARGV==6;
 
 my $pattern =shift;
 my $outdir = shift;
 my $python = shift;
 my $bed = shift;
 my $cf = shift;
+my $bin=shift;
 system("mkdir -p $outdir");
 
 my @files = glob("$pattern");
@@ -31,10 +32,10 @@ my $controls = join(" ",@tmps);
 my $n=0;
 foreach my $file(@files){
 	my $name = (split /\./,basename($file))[0];
-	my $cmd = "$python ~/pipeline/amplicon-cnv/amplicon-cnv.py --case $file --controls $controls --bed-gc $bed --output $outdir/$name.cnv.txt --no-plot";
+	my $cmd = "$python ~/pipeline/amplicon-cnv/amplicon-cnv.py --case $file --controls $controls --bed-gc $bed --output $outdir/$name.cnv.txt --no-plot --bin $bin";
 	$n++;
 	print "$n\n";
-	#	print "$cmd\n";
+	print "$cmd\n";
 	#last;
 	system($cmd);
 }
