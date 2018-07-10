@@ -14,3 +14,4 @@
 - get_list.pl:	一般list生成（样本名	fq1	fq2）
 - control_plot.pl:	批量画图
 - run_amplicon_cnv.pl:	测试流程用
+- get_region_depth.pl:	统计cnv的深度
