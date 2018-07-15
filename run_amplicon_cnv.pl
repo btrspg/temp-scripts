@@ -32,7 +32,7 @@ my $controls = join(" ",@tmps);
 my $n=0;
 foreach my $file(@files){
 	my $name = (split /\./,basename($file))[0];
-	my $cmd = "time $python ~/pipeline/amplicon-cnv/amplicon-cnv.py --case $file --controls $controls --bed-gc $bed --output $outdir/$name.cnv.txt --no-plot --bin $bin";
+	my $cmd = "time $python ~/pipeline/amplicon-cnv/amplicon-cnv.py --case $file --controls $controls --bed-gc $bed --output $outdir/$name.cnv.txt  --gc-length $bin";
 	$n++;
 	print "$n\n";
 	print "$cmd\n";
