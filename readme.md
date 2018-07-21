@@ -15,3 +15,6 @@
 - control_plot.pl:	批量画图
 - run_amplicon_cnv.pl:	测试流程用
 - get_region_depth.pl:	统计cnv的深度
+- rm_chr.pl:	去除开头为chr的chr
+- gtf2bed.pl:	将gtf文件转bed
+- rm_chr.pl:	去除每行开头的chr
