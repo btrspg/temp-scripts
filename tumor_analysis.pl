@@ -23,92 +23,92 @@ while(<IL>){
     my @cells = split /\t/;
     my $tumor = $cells[0];
     my $normal = $cells[3];
-    my $cmd1 = "$paras{gatk4} CollectReadCounts \
-    -I $dir/$tumor-$normal/ALIGNMENT/$tumor.final.bam \
-    -L $paras{interval_list} \
-    --interval-merging-rule OVERLAPPING_ONLY \
+    my $cmd1 = "$paras{gatk4} CollectReadCounts \\
+    -I $dir/$tumor-$normal/ALIGNMENT/$tumor.final.bam \\
+    -L $paras{interval_list} \\
+    --interval-merging-rule OVERLAPPING_ONLY \\
     -O $dir/ANALYSIS/$tumor.counts.hdf5";
-    my $cmd2 = "$paras{gatk4} CollectReadCounts \
-    -I $dir/$tumor-$normal/ALIGNMENT/$normal.final.bam \
-    -L $paras{interval_list} \
-    --interval-merging-rule OVERLAPPING_ONLY \
+    my $cmd2 = "$paras{gatk4} CollectReadCounts \\
+    -I $dir/$tumor-$normal/ALIGNMENT/$normal.final.bam \\
+    -L $paras{interval_list} \\
+    --interval-merging-rule OVERLAPPING_ONLY \\
     -O $dir/ANALYSIS/$normal.counts.hdf5";
 
     push @normal_cnvs,"-I $dir/ANALYSIS/$normal.counts.hdf5 ";
 
-    my $cmd3 ="$paras{gatk4} CollectAllelicCounts \
-    -I $dir/$tumor-$normal/ALIGNMENT/$tumor.final.bam \
-    -R $paras{reference} \
-    -L $dir/$tumor-$normal/VARIANT/$tumor-$normal.final.vcf \
+    my $cmd3 ="$paras{gatk4} CollectAllelicCounts \\
+    -I $dir/$tumor-$normal/ALIGNMENT/$tumor.final.bam \\
+    -R $paras{reference} \\
+    -L $dir/$tumor-$normal/VARIANT/$tumor-$normal.final.vcf \\
     -O $dir/ANALYSIS/$tumor.tumor.allelicCounts.tsv";
-    my $cmd4 ="$paras{gatk4} CollectAllelicCounts \
-    -I $dir/$tumor-$normal/ALIGNMENT/$normal.final.bam \
-    -R $paras{reference} \
-    -L $dir/$tumor-$normal/VARIANT/$tumor-$normal.final.vcf \
+    my $cmd4 ="$paras{gatk4} CollectAllelicCounts \\
+    -I $dir/$tumor-$normal/ALIGNMENT/$normal.final.bam \\
+    -R $paras{reference} \\
+    -L $dir/$tumor-$normal/VARIANT/$tumor-$normal.final.vcf \\
     -O $dir/ANALYSIS/$normal.normal.allelicCounts.tsv";
-    my $cmd5 ="$paras{gatk4} DenoiseReadCounts \
+    my $cmd5 ="$paras{gatk4} DenoiseReadCounts \\
     -I $dir/ANALYSIS/$tumor.counts.hdf5 \
-    --count-panel-of-normals $dir/ANALYSIS/cnv.pon.hdf5 \
-    --standardized-copy-ratios $dir/ANALYSIS/$tumor.standardizedCR.tsv \
-    --denoised-copy-ratios $dir/ANALYSIS/$tumor.denoisedCR.tsv \
+    --count-panel-of-normals $dir/ANALYSIS/cnv.pon.hdf5 \\
+    --standardized-copy-ratios $dir/ANALYSIS/$tumor.standardizedCR.tsv \\
+    --denoised-copy-ratios $dir/ANALYSIS/$tumor.denoisedCR.tsv \\
     --annotated-intervals $paras{annotated_intervals}
-    $paras{gatk4} ModelSegments \
-    --denoised-copy-ratios $dir/ANALYSIS/$tumor.denoisedCR.tsv \
-    --allelic-counts $dir/ANALYSIS/$tumor.tumor.allelicCounts.tsv \
-    --normal-allelic-counts $dir/ANALYSIS/$normal.normal.allelicCounts.tsv \
-    --output-prefix $tumor.CNV \
+    $paras{gatk4} ModelSegments \\
+    --denoised-copy-ratios $dir/ANALYSIS/$tumor.denoisedCR.tsv \\
+    --allelic-counts $dir/ANALYSIS/$tumor.tumor.allelicCounts.tsv \\
+    --normal-allelic-counts $dir/ANALYSIS/$normal.normal.allelicCounts.tsv \\
+    --output-prefix $tumor.CNV \\
     -O $dir/ANALYSIS/
-    $paras{gatk4} CallCopyRatioSegments \
-    -I $dir/ANALYSIS/$tumor.CNV.cr.seg \
+    $paras{gatk4} CallCopyRatioSegments \\
+    -I $dir/ANALYSIS/$tumor.CNV.cr.seg \\
     -O $dir/ANALYSIS/$tumor.CNV.ModelSegments.called.seg
     grep -v '^\@' $dir/ANALYSIS/$tumor.CNV.ModelSegments.called.seg | grep -v '^CONTIG' > $dir/ANALYSIS/$tumor.CNV.segment.txt";
 
-    my $cmd6 = "$paras{gatk4} PlotDenoisedCopyRatios \
-    --standardized-copy-ratios $dir/ANALYSIS/$tumor.standardizedCR.tsv \
-    --denoised-copy-ratios  $dir/ANALYSIS/$tumor.denoisedCR.tsv \
-    --sequence-dictionary $paras{plot_dict}  \
-    --minimum-contig-length 46709983 \
+    my $cmd6 = "$paras{gatk4} PlotDenoisedCopyRatios \\
+    --standardized-copy-ratios $dir/ANALYSIS/$tumor.standardizedCR.tsv \\
+    --denoised-copy-ratios  $dir/ANALYSIS/$tumor.denoisedCR.tsv \\
+    --sequence-dictionary $paras{plot_dict}  \\
+    --minimum-contig-length 46709983 \\
     --output $dir/ANALYSIS/ --output-prefix $tumor.tumorpre.plot
-    $paras{gatk4} PlotModeledSegments \
-    --denoised-copy-ratios $dir/ANALYSIS/$tumor.denoisedCR.tsv \
-    --allelic-counts $dir/ANALYSIS/$tumor.CNV.hets.tsv \
-    --segments $dir/ANALYSIS/$tumor.CNV.modelFinal.seg \
-    --sequence-dictionary $paras{plot_dict} \
-    --output-prefix $tumor.CNV.plot \
+    $paras{gatk4} PlotModeledSegments \\
+    --denoised-copy-ratios $dir/ANALYSIS/$tumor.denoisedCR.tsv \\
+    --allelic-counts $dir/ANALYSIS/$tumor.CNV.hets.tsv \\
+    --segments $dir/ANALYSIS/$tumor.CNV.modelFinal.seg \\
+    --sequence-dictionary $paras{plot_dict} \\
+    --output-prefix $tumor.CNV.plot \\
     -O $dir/ANALYSIS";
 
-    my $cmd7 = "$paras{perl} $paras{vcf2thetain} $dir/$tumor-$normal/VARIANT/$tumor-$normal.final.vcf \
+    my $cmd7 = "$paras{perl} $paras{vcf2thetain} $dir/$tumor-$normal/VARIANT/$tumor-$normal.final.vcf \\
     $dir/ANALYSIS/$tumor-$normal.purity
-    $paras{python3} $paras{createthetaexomeinput} \
-    -s $dir/ANALYSIS/$tumor.CNV.segment.txt \
-    -t $dir/$tumor-$normal/ALIGNMENT/$tumor.final.bam  \
-    -n $dir/$tumor-$normal/ALIGNMENT/$normal.final.bam \
-    --FA $paras{reference} \
-    --EXON_FILE $paras{target_bed} \
+    $paras{python3} $paras{createthetaexomeinput} \\
+    -s $dir/ANALYSIS/$tumor.CNV.segment.txt \\
+    -t $dir/$tumor-$normal/ALIGNMENT/$tumor.final.bam  \\
+    -n $dir/$tumor-$normal/ALIGNMENT/$normal.final.bam \\
+    --FA $paras{reference} \\
+    --EXON_FILE $paras{target_bed} \\
     --DIR $dir/ANALYSIS --OUTPUT_PREFIX $tumor.theta-input
-    $paras{theta} $dir/ANALYSIS/$tumor.theta-input.input \
-    --TUMOR_FILE $dir/ANALYSIS/$tumor-$normal.purity.tumor.snp.txt \
-    --NORMAL_FILE $dir/ANALYSIS/$tumor-$normal.purity.normal.snp.txt \
-    --DIRECTORY $dir/ANALYSIS \
+    $paras{theta} $dir/ANALYSIS/$tumor.theta-input.input \\
+    --TUMOR_FILE $dir/ANALYSIS/$tumor-$normal.purity.tumor.snp.txt \\
+    --NORMAL_FILE $dir/ANALYSIS/$tumor-$normal.purity.normal.snp.txt \\
+    --DIRECTORY $dir/ANALYSIS \\
     --OUTPUT_PREFIX $tumor-$normal.purity";
 
-    my $cmd8 = "$paras{python3} $paras{generate_pyclone_input} \
-    --cnv-type gatk \
-    --cnv $dir/ANALYSIS/$tumor.CNV.ModelSegments.called.seg \
-    --variant $dir/$tumor-$normal/ANNOTATION/$tumor-$normal.vep.annotation.txt \
-    --threshold 20 \
-    --prefix $dir/ANALYSIS/$tumor.subclone \
+    my $cmd8 = "$paras{python3} $paras{generate_pyclone_input} \\
+    --cnv-type gatk \\
+    --cnv $dir/ANALYSIS/$tumor.CNV.ModelSegments.called.seg \\
+    --variant $dir/$tumor-$normal/ANNOTATION/$tumor-$normal.vep.annotation.txt \\
+    --threshold 20 \\
+    --prefix $dir/ANALYSIS/$tumor.subclone \\
     --target pyclone
-    $paras{pyclone} setup_analysis \
-    --in_files $dir/ANALYSIS/$tumor.subclone.pyclone.tsv \
-    --working_dir $dir/ANALYSIS/$tumor \
-    --samples $tumor \
+    $paras{pyclone} setup_analysis \\
+    --in_files $dir/ANALYSIS/$tumor.subclone.pyclone.tsv \\
+    --working_dir $dir/ANALYSIS/$tumor \\
+    --samples $tumor \\
     --prior total_copy_number
-    $paras{pyclone} run_analysis \
+    $paras{pyclone} run_analysis \\
     --config_file $dir/ANALYSIS/$tumor/config.yaml
-    $paras{pyclone} build_table \
-    --config_file $dir/ANALYSIS/$tumor/config.yaml \
-    --out_file $dir/ANALYSIS/$tumor.old-style \
+    $paras{pyclone} build_table \\
+    --config_file $dir/ANALYSIS/$tumor/config.yaml \\
+    --out_file $dir/ANALYSIS/$tumor.old-style \\
     --table_type old_style
     $paras{python3} $paras{subclone2fish} -i $dir/ANALYSIS/$tumor.old-style -o $dir/ANALYSIS/$tumor.finalinput.txt
     $paras{rscript} $paras{fishplot} $dir/ANALYSIS/$tumor.finalinput.txt $dir/ANALYSIS/$tumor/";
@@ -123,9 +123,9 @@ while(<IL>){
     push @call_cmds,$cmd8;
 }
 my $normals = join(' ',@normal_cnvs);
-print SH "$paras{gatk4} CreateReadCountPanelOfNormals \
-$normals \
---annotated-intervals $paras{annotated_intervals} \
+print SH "$paras{gatk4} CreateReadCountPanelOfNormals \\
+$normals \\
+--annotated-intervals $paras{annotated_intervals} \\
 -O $dir/ANALYSIS/cnv.pon.hdf5";
 
 foreach my $cmd(@call_cmds){
