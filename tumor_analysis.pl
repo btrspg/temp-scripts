@@ -153,5 +153,29 @@ sub get_paras{
     $hash{'interval_list'}='/wes/chenyl/database/interval_list_annotation/agilent.interval_list';
     $hash{'annotated_intervals'}='/wes/chenyl/database/interval_list_annotation/agilent.annotated_intervals.tsv';
     $hash{'reference'}='/wes/chenyl/database/human_g1k_v37_modified.fasta';
+
+
+
+
+    $hash{'subclone2fish'}='/home/chenyuelong/pipeline/tumor-analysis-pipeline/other_scripts/subclone2fish.py';
+    $hash{'generate_pyclone_input'}='/home/chenyuelong/pipeline/tumor-analysis-pipeline/other_scripts/generate_subclone_file/scripts/command_purity.py';
+    $hash{'fishplot'}='/home/chenyuelong/pipeline/tumor-analysis-pipeline/other_scripts/fishplot.R';
+    $hash{'vcf2thetain'}='/home/chenyuelong/pipeline/tumor-analysis-pipeline/other_scripts/vcf2thetain.pl';
+    $hash{'createthetaexomeinput'}='/home/chenyuelong/pipeline/tumor-analysis-pipeline/other_scripts/createTHetAExomeInput.py';
+
+
+    $hash{'reference'}='/wes/chenyl/database/human_g1k_v37_modified.fasta';
+    $hash{'known_site1'}='/wes/chenyl/projects/fh_analysis/database/Mills_and_1000G_gold_standard.nochr.indels.hg19.sites.vcf';
+    $hash{'known_site2'}='/wes/chenyl/projects/fh_analysis/database/dbsnp_138.hg19.nochr.vcf';
+    $hash{'gnomad'}='/wes/chenyl/database/gnomad.exomes.r2.0.2.sites.vcf.gz';
+    $hash{'ref_idx'}='/wes/chenyl/database/human_g1k_v37_modified.fasta.fai';
+    $hash{'target_bed'}='/wes/chenyl/database/agilent.bed';
+    $hash{'gatk_intervals'}='/wes/chenyl/database/agilent.gatk.intervals';
+    $hash{'vep_ref'}='/wes/chenyl/database/VEP/homo_sapiens/92_GRCh37/Homo_sapiens.GRCh37.75.dna.primary_assembly.fa.gz';
+    $hash{'vep_cache'}='/wes/chenyl/database/VEP';
+    $hash{'population_allele_frequencies'}='/wes/chenyl/database/hapmap_3.3_hg19_2nochr_pop_stratified_af.vcf';
+    $hash{'plot_dict'}='/wes/chenyl/database/plot.dict';
+    $hash{'annotated_intervals'}='/wes/chenyl/database/interval_list_annotation/agilent.annotated_intervals.tsv';
+    $hash{'interval_list'}='/wes/chenyl/database/interval_list_annotation/agilent.interval_list';
     return %hash;
 }
