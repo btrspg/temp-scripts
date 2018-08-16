@@ -47,7 +47,7 @@ while(<IL>){
     -L $dir/$tumor-$normal/VARIANT/$tumor-$normal.final.vcf \\
     -O $dir/ANALYSIS/$normal.normal.allelicCounts.tsv";
     my $cmd5 ="$paras{gatk4} DenoiseReadCounts \\
-    -I $dir/ANALYSIS/$tumor.counts.hdf5 \
+    -I $dir/ANALYSIS/$tumor.counts.hdf5 \\
     --count-panel-of-normals $dir/ANALYSIS/cnv.pon.hdf5 \\
     --standardized-copy-ratios $dir/ANALYSIS/$tumor.standardizedCR.tsv \\
     --denoised-copy-ratios $dir/ANALYSIS/$tumor.denoisedCR.tsv \\
@@ -89,14 +89,14 @@ while(<IL>){
     $paras{theta} $dir/ANALYSIS/$tumor.theta-input.input \\
     --TUMOR_FILE $dir/ANALYSIS/$tumor-$normal.purity.tumor.snp.txt \\
     --NORMAL_FILE $dir/ANALYSIS/$tumor-$normal.purity.normal.snp.txt \\
-    --DIRECTORY $dir/ANALYSIS \\
+    --DIR $dir/ANALYSIS \\
     --OUTPUT_PREFIX $tumor-$normal.purity";
 
     my $cmd8 = "$paras{python3} $paras{generate_pyclone_input} \\
     --cnv-type gatk \\
     --cnv $dir/ANALYSIS/$tumor.CNV.ModelSegments.called.seg \\
     --variant $dir/$tumor-$normal/ANNOTATION/$tumor-$normal.vep.annotation.txt \\
-    --threshold 20 \\
+    --threshold 100 \\
     --prefix $dir/ANALYSIS/$tumor.subclone \\
     --target pyclone
     $paras{pyclone} setup_analysis \\
@@ -111,12 +111,53 @@ while(<IL>){
     --out_file $dir/ANALYSIS/$tumor.old-style \\
     --table_type old_style
     $paras{python3} $paras{subclone2fish} -i $dir/ANALYSIS/$tumor.old-style -o $dir/ANALYSIS/$tumor.finalinput.txt
-    $paras{rscript} $paras{fishplot} $dir/ANALYSIS/$tumor.finalinput.txt $dir/ANALYSIS/$tumor/";
+    $paras{rscript} $paras{fishplot} $dir/ANALYSIS/$tumor.finalinput.txt $dir/ANALYSIS/$tumor/
+    $paras{pyclone} plot_clusters \\
+    --config_file $dir/ANALYSIS/$tumor//config.yaml \\
+    --plot_file $dir/ANALYSIS/$tumor/$tumor.plot_cluster.similarity_matrix.pdf \\
+    --plot_type similarity_matrix
+    $paras{pyclone} plot_clusters \\
+    --config_file $dir/ANALYSIS/$tumor/config.yaml \\
+    --plot_file $dir/ANALYSIS/$tumor/$tumor.plot_cluster.density.pdf \\
+    --plot_type density
+    $paras{pyclone} plot_clusters \\
+    --config_file $dir/ANALYSIS/$tumor/config.yaml \\
+    --plot_file $dir/ANALYSIS/$tumor/$tumor.plot_cluster.scatter.pdf \\
+    --plot_type scatter
+    $paras{pyclone} plot_clusters \\
+    --config_file $dir/ANALYSIS/$tumor/config.yaml \\
+    --plot_file $dir/ANALYSIS/$tumor/$tumor.plot_cluster.parallel_coordinates.pdf \\
+    --plot_type parallel_coordinates
+    $paras{pyclone} plot_loci \\
+    --config_file $dir/ANALYSIS/$tumor/config.yaml \\
+    --plot_file $dir/ANALYSIS/$tumor/$tumor.plot_loci.density.pdf \\
+    --plot_type density
+    $paras{pyclone} plot_loci \\
+    --config_file $dir/ANALYSIS/$tumor/config.yaml \\
+    --plot_file $dir/ANALYSIS/$tumor/$tumor.plot_parallel_coordinates.pdf \\
+    --plot_type parallel_coordinates
+    $paras{pyclone} plot_loci \\
+    --config_file $dir/ANALYSIS/$tumor/config.yaml \\
+    --plot_file $dir/ANALYSIS/$tumor/$tumor.plot_parallel_scatter.pdf \\
+    --plot_type scatter
+    $paras{pyclone} plot_loci \\
+    --config_file $dir/ANALYSIS/$tumor/config.yaml \\
+    --plot_file $dir/ANALYSIS/$tumor/$tumor.plot_loci_similarity_matrix.pdf \\
+    --plot_type similarity_matrix
+    $paras{pyclone} plot_loci \\
+    --config_file $dir/ANALYSIS/$tumor/config.yaml \\
+    --plot_file $dir/ANALYSIS/$tumor/$tumor.plot_loci.vaf_parallel_coordinates.pdf \\
+    --plot_type vaf_parallel_coordinates
+    $paras{pyclone} plot_loci \\
+    --config_file $dir/ANALYSIS/$tumor/config.yaml \\
+    --plot_file $dir/ANALYSIS/$tumor/$tumor.plot_loci.vaf_scatter.pdf \\
+    --plot_type vaf_scatter
+    ";
 
-    print SH $cmd2."\n";
-    print SH $cmd1."\n";
-    print SH $cmd3."\n";
-    print SH $cmd4."\n";
+    #print SH $cmd2."\n";
+    #print SH $cmd1."\n";
+    #print SH $cmd3."\n";
+    #print SH $cmd4."\n";
     push @call_cmds,$cmd5;
     push @call_cmds,$cmd6;
     push @call_cmds,$cmd7;
@@ -126,7 +167,7 @@ my $normals = join(' ',@normal_cnvs);
 print SH "$paras{gatk4} CreateReadCountPanelOfNormals \\
 $normals \\
 --annotated-intervals $paras{annotated_intervals} \\
--O $dir/ANALYSIS/cnv.pon.hdf5";
+-O $dir/ANALYSIS/cnv.pon.hdf5\n";
 
 foreach my $cmd(@call_cmds){
     print SH "$cmd\n";
