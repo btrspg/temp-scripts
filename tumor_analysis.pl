@@ -87,8 +87,6 @@ while(<IL>){
     --EXON_FILE $paras{target_bed} \\
     --DIR $dir/ANALYSIS --OUTPUT_PREFIX $tumor.theta-input
     $paras{theta} $dir/ANALYSIS/$tumor.theta-input.input \\
-    --TUMOR_FILE $dir/ANALYSIS/$tumor-$normal.purity.tumor.snp.txt \\
-    --NORMAL_FILE $dir/ANALYSIS/$tumor-$normal.purity.normal.snp.txt \\
     --DIR $dir/ANALYSIS \\
     --OUTPUT_PREFIX $tumor-$normal.purity";
 
@@ -158,9 +156,10 @@ while(<IL>){
     #print SH $cmd1."\n";
     #print SH $cmd3."\n";
     #print SH $cmd4."\n";
-    push @call_cmds,$cmd5;
-    push @call_cmds,$cmd6;
-    push @call_cmds,$cmd7;
+    #push @call_cmds,$cmd5;
+    #push @call_cmds,$cmd6;
+    #push @call_cmds,$cmd7;
+    print "$cmd7\n";
     push @call_cmds,$cmd8;
 }
 my $normals = join(' ',@normal_cnvs);
