@@ -12,7 +12,7 @@ if (@gzs ==0){
 	$tag='fastq.gz';
 }
 
-foreach my $gz(@gzs){
+foreach my $gz(reverse sort @gzs){
 	my $name = (split /_/,basename($gz))[0];
 	my $fq2 = $gz;
 	$fq2 =~ s/1\.$tag/2\.$tag/;
